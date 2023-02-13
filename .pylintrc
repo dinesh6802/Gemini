@@ -1,0 +1,30 @@
+[BASIC]
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names=i,
+           j,
+           k,
+           v,
+           ex,
+           Run,
+           df,
+           es,
+           e,
+           c,
+           f,
+           r,
+           fh,
+           n,
+           p,
+           _
+
+[MASTER]
+init-hook='import sys; sys.path = ["src"] + sys.path'
+ignore-patterns=gunicorn\..*\.conf.py
+
+[FORMAT]
+max-line-length=150
+
+[MESSAGES CONTROL]
+
+disable = W1202, E1120, E1123, C0209

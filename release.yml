@@ -1,0 +1,90 @@
+# This file provides the configuration necessary for releasing an
+# application taking full advantage of the Autobahn.
+
+# Currently we require the release version here in this file
+# must match pom.xml
+releaseVersion: "0.4.31" #to be updated with correct version number
+
+# Nexus releases  - matches pom.xml file
+nexusGroupId: "eai83.com.fedex.gemini"
+nexusArtifactId: "gemini-inbound-hscode-prediction-business-service"
+
+# URI that points to MS Teams channel. Ensure the channel is configured
+# and the webhook is valid
+msTeamsWebhookUri: "https://myfedex.webhook.office.com/webhookb2/afac1554-1efa-4322-addb-1726fb2fb927@b945c813-dce6-41f8-8457-5a12c2fe15bf/IncomingWebhook/f05acd6d1f714e358b422fbfb628262d/40c332a9-4744-4e6b-a3d4-effa31f0089d"
+
+# The Jenkins job that will build the RC candidate
+jenkinsJob: "APAC/job/PCClient-83/job/FLOW_JOBS/job/RC_BUILD/job/gemini-inbound-hscode-prediction-business-service"
+jenkinsToken: "FLOWToken"
+jenkinsUrl: "https://jenkins-emea.web.fedex.com:8443/jenkins/"
+jenkinsConfig: "JenkinsEMEA"
+jenkinsTestArtifacts: "target/surefire-reports.zip" #to be updated for foresight
+
+# SonarQube project
+sonarProject: 'gemini-inbound-hscode-prediction-business-service'
+
+#Fortify Scanner inputs - fixed for authorization service, there is one Fortify id per service
+fortifyProjectID: "226264628" # htscode fortify id
+fortifyBaseUrl: "https://wiessc.web.fedex.com:8888" # to be updated for foresight if required
+
+#####################################   PDSM   #############################################
+### PDSM RFC inputs - validated for change request.
+# If this is not set, then ARO tool will use the mergedBy variable
+changeCoordinator: "3960993" # to be updated for foresight
+
+impactedOpco: "6d0eed43db326b4044980be5d49619a0"
+
+# List of reasons in PDSM { Upgrade, Patching, Configuration, Decommission, Commission, Capacity, License, Repair, Maintenance, New Site, Scheduling, Corporate Load }
+reason: "Patching"
+configurationItem: "GEMINI"
+assignmentGroup: "FXE_SPT_APAC_OpsSolL3Foresight" # "FXE_SPT_APAC_OpsSolL3MIST"  #use your own group for your team to be updated
+
+requestDescription: "Initial release of GEMINI service"
+requestShortDescription: "Feature# GEMINI HTS Code prediction service | Description#
+GEMINI HTS Code prediction service - V1.0.0"
+
+# backoutDur must be one of:
+# Low = < 30 mins, Med = 30-60 mins, High = > 60 mins
+backoutDur: "Low = < 30 mins"
+
+### Planning tab in change request of PDSM
+# justification should include business justification, followed by risk if not done
+# risk has to be one of these: Low, Medium, High
+justification: "GEMINI HTS Code prediction service"
+
+# You need test, implementation, and backout plans.
+testPlan: "1) Deploy the code  2) check if a prediction could be done"
+implementationPlan: "Automated deployment to VM"
+
+### Schedule tab in change request of PDSM
+# requestStart-requestEnd is the schedule tab of the Change Request (GMT Timezone)
+#requestStart and requestEnd are optional, defaults are supplied by Flow
+#comment out , let default to one hour after code merge
+requestStart: "2022-04-15 09:00:00"
+requestEnd: "2022-04-15 11:00:00"
+
+### Change Task tab in change request of PDSM
+taskShortDescription: "Feature# GEMINI HTS Code prediction service - V1.0.0"
+#####################################   PDSM   #############################################
+#################### Flow subpipelines and the parameters ######################
+# Do not change this section if using standard GEMINI CORE FLOW subpipelines
+# Sub pipeline executions - match those defined in Flow
+qaDeploymentPipeline: "qa.deployment"
+autoTestingPipeline: "qa.tests"
+qaDeploymentJob: "APAC/job/PCClient-83/job/FLOW_JOBS/job/QA_Stage/job/gemini-inbound-hscode-prediction-business-service-deploy"
+qaDeploymentToken: "qaDeployToken"
+qaDeploymentParams:  "GROUPID=$[/myPipelineRuntime/appProperties/nexusGroupId] ARTIFACTID=$[/myPipelineRuntime/appProperties/nexusArtifactId] VERSION=$[/myPipelineRuntime/appProperties/releaseVersion]"
+qaDeploymentEnv: "PCF_TARGET=development"
+qaTestJob: "APAC/job/PCClient-83/job/FLOW_JOBS/job/QA_Stage/job/gemini-inbound-hscode-prediction-business-service-test"
+qaTestToken: "qaTestToken"
+qaTestParams:  "GROUPID=$[/myPipelineRuntime/appProperties/nexusGroupId] ARTIFACTID=$[/myPipelineRuntime/appProperties/nexusArtifactId] VERSION=$[/myPipelineRuntime/appProperties/releaseVersion]"
+
+prodDeploymentPipeline: "prod.deployment"
+smokeTestPipeline: "prod.tests"
+prodDeploymentJob: "APAC/job/PCClient-83/job/FLOW_JOBS/job/PROD_Stage/job/gemini-inbound-hscode-prediction-business-service-deploy"
+prodDeploymentToken: "prodDeployToken"
+prodDeploymentParams: "GROUPID=$[/myPipelineRuntime/appProperties/nexusGroupId] ARTIFACTID=$[/myPipelineRuntime/appProperties/nexusArtifactId] VERSION=$[/myPipelineRuntime/appProperties/releaseVersion]"
+prodDeploymentEnv: "PCF_TARGET=release"
+prodTestJob: "APAC/job/PCClient-83/job/FLOW_JOBS/job/PROD_Stage/job/gemini-inbound-hscode-prediction-business-service-test"
+prodTestToken: "prodTestToken"
+prodTestParams: "GROUPID=$[/myPipelineRuntime/appProperties/nexusGroupId] ARTIFACTID=$[/myPipelineRuntime/appProperties/nexusArtifactId] VERSION=$[/myPipelineRuntime/appProperties/releaseVersion]"

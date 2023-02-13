@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eai83.com.fedex.gemini</groupId>
+    <artifactId>gemini-inbound-hscode-prediction-business-service</artifactId>
+    <version>0.4.31</version>
+    <name>gemini-inbound-hscode-prediction-business-service</name>
+    <description>Gemini HTS code matching service</description>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>eai83.com.fedex.gemini</groupId>
+                <artifactId>gemini-inbound-hscode-prediction-business-service-albert
+                </artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <type>zip</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>eai83.com.fedex.gemini</groupId>
+                <artifactId>gemini-inbound-hscode-prediction-business-service-sg
+                </artifactId>
+                <version>0.1.0</version>
+                <type>zip</type>
+                <scope>runtime</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-archive</id>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
